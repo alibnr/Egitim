@@ -51,6 +51,7 @@ export default class App extends Component {
       (c) => c.product.id !== cartItem.product.id
     );
     this.setState({ cart: newCart });
+    alertify.error(cartItem.product.productName + " remove to cart");
   };
 
   render() {
@@ -76,23 +77,32 @@ export default class App extends Component {
             </Col>
             <Col xs="9">
               <Switch>
-                <Route exact path="/" render = {(props) => (
-                 
-                  <ProductList
-                  {...props}
-                  product={this.state.products}
-                addToCart={this.addToCart}
-                currentCategory={this.state.currentCategory}
-                title={info}
-              ></ProductList>
-                )
-
-                }></Route>
-                <Route exact path="/cart" component={CartList}></Route>
+                <Route
+                  exact
+                  path="/"
+                  render={(props) => (
+                    <ProductList
+                      {...props}
+                      product={this.state.products}
+                      addToCart={this.addToCart}
+                      currentCategory={this.state.currentCategory}
+                      title={info}
+                    ></ProductList>
+                  )}
+                ></Route>
+                <Route
+                  exact
+                  path="/cart"
+                  render={(props) => (
+                    <CartList
+                      {...props}
+                      cart={this.state.cart}
+                      removeFromCart={this.removeFromCart}
+                    ></CartList>
+                  )}
+                ></Route>
                 <Route exact component={NotFound}></Route>
               </Switch>
-
-              
             </Col>
           </Row>
         </Container>
