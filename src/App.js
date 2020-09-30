@@ -4,6 +4,9 @@ import { Container, Row, Col } from "reactstrap";
 import ProductList from "./ProductList";
 import React, { Component } from "react";
 import alertify from "alertifyjs";
+import { Route, Switch } from "react-router-dom";
+import CartList from "./CartList";
+import NotFound from "./NotFound";
 
 export default class App extends Component {
   state = {
@@ -11,7 +14,7 @@ export default class App extends Component {
     products: [],
     cart: [],
   };
-  
+
   changeCategory = (category) => {
     this.setState({ currentCategory: category.categoryName });
     this.getProducts(category.id);
@@ -32,21 +35,22 @@ export default class App extends Component {
   };
   addToCart = (pro) => {
     let newCart = this.state.cart;
-   var addedItem = newCart.find(p=>p.product.id === pro.id);
+    var addedItem = newCart.find((p) => p.product.id === pro.id);
 
-    if(addedItem){
+    if (addedItem) {
       addedItem.quantity++;
-    }
-    else{
+    } else {
       newCart.push({ product: pro, quantity: 1 });
     }
     this.setState({ cart: newCart });
     alertify.success(pro.productName + " added to cart");
   };
 
-  removeFromCart= (cartItem) => {
-    let newCart = this.state.cart.filter(c=>c.product.id !== cartItem.product.id)
-    this.setState({cart: newCart})
+  removeFromCart = (cartItem) => {
+    let newCart = this.state.cart.filter(
+      (c) => c.product.id !== cartItem.product.id
+    );
+    this.setState({ cart: newCart });
   };
 
   render() {
@@ -57,7 +61,10 @@ export default class App extends Component {
     return (
       <div>
         <Container>
-          <Navigator removeFromCart ={this.removeFromCart} cart={this.state.cart}></Navigator>
+          <Navigator
+            removeFromCart={this.removeFromCart}
+            cart={this.state.cart}
+          ></Navigator>
 
           <Row>
             <Col xs="3">
@@ -68,12 +75,24 @@ export default class App extends Component {
               ></Category>
             </Col>
             <Col xs="9">
-              <ProductList
-                product={this.state.products}
+              <Switch>
+                <Route exact path="/" render = {(props) => (
+                 
+                  <ProductList
+                  {...props}
+                  product={this.state.products}
                 addToCart={this.addToCart}
                 currentCategory={this.state.currentCategory}
                 title={info}
               ></ProductList>
+                )
+
+                }></Route>
+                <Route exact path="/cart" component={CartList}></Route>
+                <Route exact component={NotFound}></Route>
+              </Switch>
+
+              
             </Col>
           </Row>
         </Container>
