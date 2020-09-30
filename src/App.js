@@ -8,26 +8,45 @@ export default class App extends Component {
   state = {
     currentCategory: "",
     products: [],
+    cart: [],
   };
+  
   changeCategory = (category) => {
     this.setState({ currentCategory: category.categoryName });
-    this.getProducts(category.id)
-    
+    this.getProducts(category.id);
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getProducts();
   }
 
   getProducts = (id) => {
-    let url= "http://localhost:3000/products"
-    if (id){
+    let url = "http://localhost:3000/products";
+    if (id) {
       url = url + "?categoryId=" + id;
     }
     fetch(url)
       .then((response) => response.json())
       .then((data) => this.setState({ products: data }));
   };
+  addToCart = (pro) => {
+    let newCart = this.state.cart;
+   var addedItem = newCart.find(p=>p.product.id === pro.id);
+
+    if(addedItem){
+      addedItem.quantity++;
+    }
+    else{
+      newCart.push({ product: pro, quantity: 1 });
+    }
+    this.setState({ cart: newCart });
+  };
+
+  removeFromCart= (cartItem) => {
+    let newCart = this.state.cart.filter(c=>c.product.id !== cartItem.product.id)
+    this.setState({cart: newCart})
+  };
+
   render() {
     let info = {
       titleProduct: "Product Lİst",
@@ -36,9 +55,8 @@ export default class App extends Component {
     return (
       <div>
         <Container>
-          <Row>
-            <Navigator></Navigator>
-          </Row>
+          <Navigator removeFromCart ={this.removeFromCart} cart={this.state.cart}></Navigator>
+
           <Row>
             <Col xs="3">
               <Category
@@ -50,6 +68,7 @@ export default class App extends Component {
             <Col xs="9">
               <ProductList
                 product={this.state.products}
+                addToCart={this.addToCart}
                 currentCategory={this.state.currentCategory}
                 title={info}
               ></ProductList>
