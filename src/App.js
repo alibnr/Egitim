@@ -8,6 +8,7 @@ import { Route, Switch } from "react-router-dom";
 import CartList from "./CartList";
 import NotFound from "./NotFound";
 import FormDemo from "./FormDemo";
+import FormDemo2 from "./FormDemo2";
 
 export default class App extends Component {
   state = {
@@ -103,6 +104,7 @@ export default class App extends Component {
                   )}
                 ></Route>
                 <Route path= "/form" component={FormDemo}></Route>
+                <Route path= "/form2" component={FormDemo2}></Route>
                 <Route exact component={NotFound}></Route>
                 
               </Switch>
