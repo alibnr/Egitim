@@ -1,6 +1,7 @@
 
 
 import React, { Component } from 'react'
+import {Link} from "react-router-dom"
 import {
   Collapse,
   Navbar,
@@ -8,7 +9,7 @@ import {
   NavbarBrand,
   Nav,
   UncontrolledDropdown,
-  DropdownToggle,
+  DropdownToggle, DropdownItem
 
 } from 'reactstrap';
 import CartSummary from './CartSummary';
@@ -26,6 +27,10 @@ export default class Navigator extends Component {
               <DropdownToggle nav caret>
               <CartSummary removeFromCart ={this.props.removeFromCart} cart = {this.props.cart}></CartSummary>
               </DropdownToggle>
+
+              <DropdownItem>
+                <Link to="form">From Demo</Link>
+              </DropdownItem>
              
             </UncontrolledDropdown>
           </Nav>
